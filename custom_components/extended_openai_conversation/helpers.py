@@ -78,7 +78,8 @@ def get_function_executor(value: str):
     if function_executor is None:
         raise FunctionNotFound(value)
     return function_executor
-
+def strip_think_blocks(content: str) -> str:
+    return re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL)
 
 def is_azure(base_url: str):
     if base_url and re.search(AZURE_DOMAIN_PATTERN, base_url):

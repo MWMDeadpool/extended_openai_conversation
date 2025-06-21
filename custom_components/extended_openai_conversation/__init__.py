@@ -90,6 +90,7 @@ from .helpers import (
     validate_authentication,
     log_openai_interaction,
     get_domain_entity_attributes,
+    strip_think_blocks
 )
 from .services import async_setup_services
 
@@ -313,7 +314,9 @@ class OpenAIAgent(conversation.AbstractConversationAgent):
         )
 
         intent_response = intent.IntentResponse(language=user_input.language)
-        intent_response.async_set_speech(query_response.message.content)
+        filtered_content = strip_think_blocks(query_response.message.content)
+        intent_response.async_set_speech(filtered_content)
+        #intent_response.async_set_speech(query_response.message.content)
         return conversation.ConversationResult(
             response=intent_response, conversation_id=conversation_id, continue_conversation=self.is_conversation_continued(messages)
         )
